@@ -1,0 +1,89 @@
+<Prefab>
+  <Window>
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+      <Children>
+
+        <!-- Dimmed background -->
+        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#000000CC" />
+
+        <!-- Main panel -->
+        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1200" SuggestedHeight="800" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#1A1A1AF0">
+          <Children>
+
+            <TextWidget Text="@TitleText" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="20" Brush="Clan.TabControl.Text" />
+
+            <ButtonWidget Command.Click="ExecuteClose" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="10" MarginRight="10" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" Brush="Popup.Delete.Button">
+              <Children>
+                <TextWidget Text="X" Brush="Clan.TabControl.Text" HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Children>
+            </ButtonWidget>
+
+            <!-- Council position list (left column) -->
+            <ListPanel DataSource="{PositionList}" WidthSizePolicy="Fixed" SuggestedWidth="550" HeightSizePolicy="StretchToParent" HorizontalAlignment="Left" MarginLeft="40" MarginTop="80" MarginBottom="40" StackLayout.LayoutMethod="VerticalTopToBottom">
+              <ItemTemplate>
+                <ButtonWidget Command.Click="ExecuteSelect" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="70" MarginBottom="8" Brush="Header.Tab.Center">
+                  <Children>
+                    <TextWidget Text="@PositionName" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="15" Brush="Clan.TabControl.Text" />
+                    <TextWidget Text="@AssigneeName" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="15" Brush="Clan.TabControl.Text" />
+                  </Children>
+                </ButtonWidget>
+              </ItemTemplate>
+            </ListPanel>
+
+            <!-- Kingsguard roster (right column) -->
+            <ListPanel DataSource="{KingsguardSlotList}" WidthSizePolicy="Fixed" SuggestedWidth="550" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" MarginRight="40" MarginTop="80" MarginBottom="40" StackLayout.LayoutMethod="VerticalTopToBottom">
+              <ItemTemplate>
+                <ButtonWidget Command.Click="ExecuteSelect" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="70" MarginBottom="8" Brush="Header.Tab.Center">
+                  <Children>
+                    <TextWidget Text="@SlotLabel" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="15" Brush="Clan.TabControl.Text" />
+                    <TextWidget Text="@MemberName" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="15" Brush="Clan.TabControl.Text" />
+                  </Children>
+                </ButtonWidget>
+              </ItemTemplate>
+            </ListPanel>
+
+          </Children>
+        </Widget>
+
+        <!-- Candidate picker overlay -->
+        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsPickerVisible">
+          <Children>
+            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#00000099" />
+
+            <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="700" SuggestedHeight="600" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#1E1E1EFA">
+              <Children>
+
+                <TextWidget Text="@PickerTitleText" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="15" Brush="Clan.TabControl.Text" />
+
+                <ButtonWidget Command.Click="ExecuteUnassignSelected" HorizontalAlignment="Left" VerticalAlignment="Top" MarginTop="10" MarginLeft="10" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="40" Brush="Header.Tab.Center">
+                  <Children>
+                    <TextWidget Text="Unassign" Brush="Clan.TabControl.Text" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Children>
+                </ButtonWidget>
+
+                <ButtonWidget Command.Click="ExecuteClosePicker" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="10" MarginRight="10" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" Brush="Popup.Delete.Button">
+                  <Children>
+                    <TextWidget Text="X" Brush="Clan.TabControl.Text" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Children>
+                </ButtonWidget>
+
+                <ListPanel DataSource="{CandidateList}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="70" MarginLeft="20" MarginRight="20" MarginBottom="20" StackLayout.LayoutMethod="VerticalTopToBottom">
+                  <ItemTemplate>
+                    <ButtonWidget Command.Click="ExecuteSelect" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="60" MarginBottom="6" Brush="Header.Tab.Center">
+                      <Children>
+                        <TextWidget Text="@Name" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="15" Brush="Clan.TabControl.Text" />
+                        <TextWidget Text="@RelevantSkillText" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="15" Brush="Clan.TabControl.Text" />
+                      </Children>
+                    </ButtonWidget>
+                  </ItemTemplate>
+                </ListPanel>
+
+              </Children>
+            </Widget>
+          </Children>
+        </Widget>
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

@@ -1,0 +1,58 @@
+<Prefab>
+  <Window>
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+      <Children>
+
+        <!-- Dimmed background -->
+        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#000000CC" />
+
+        <!-- Main panel -->
+        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1200" SuggestedHeight="800" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#1A1A1AF0">
+          <Children>
+
+            <TextWidget Text="@TitleText" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="20" Brush="Clan.TabControl.Text" />
+
+            <ButtonWidget Command.Click="ExecuteClose" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="10" MarginRight="10" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" Brush="Popup.Delete.Button">
+              <Children>
+                <TextWidget Text="X" Brush="Clan.TabControl.Text" HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Children>
+            </ButtonWidget>
+
+            <!-- Council position list (left column, or full width if no Kingsguard) -->
+            <ListPanel DataSource="{PositionList}" WidthSizePolicy="Fixed" SuggestedWidth="550" HeightSizePolicy="StretchToParent" HorizontalAlignment="Left" MarginLeft="40" MarginTop="80" MarginBottom="40" StackLayout.LayoutMethod="VerticalTopToBottom">
+              <ItemTemplate>
+                <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="70" MarginBottom="8" Sprite="BlankWhiteSquare_9" Color="#2A2A2AF0">
+                  <Children>
+                    <TextWidget Text="@PositionName" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="15" MarginTop="6" Brush="Clan.TabControl.Text" />
+                    <TextWidget Text="@AssigneeName" HorizontalAlignment="Left" VerticalAlignment="Bottom" MarginLeft="15" MarginBottom="6" Brush="Clan.TabControl.Text" />
+                    <TextWidget Text="@BenefitText" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="15" Brush="Clan.TabControl.Text" />
+                  </Children>
+                </Widget>
+              </ItemTemplate>
+            </ListPanel>
+
+            <!-- Kingsguard roster (right column, only visible for the player's own kingdom) -->
+            <Widget IsVisible="@ShowKingsguard" WidthSizePolicy="Fixed" SuggestedWidth="550" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" MarginRight="40" MarginTop="80" MarginBottom="40">
+              <Children>
+                <TextWidget Text="Kingsguard" HorizontalAlignment="Left" VerticalAlignment="Top" Brush="Clan.TabControl.Text" />
+                <ListPanel DataSource="{KingsguardList}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="35" StackLayout.LayoutMethod="VerticalTopToBottom">
+                  <ItemTemplate>
+                    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="70" MarginBottom="8" Sprite="BlankWhiteSquare_9" Color="#2A2A2AF0">
+                      <Children>
+                        <TextWidget Text="@SlotLabel" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="15" MarginTop="6" Brush="Clan.TabControl.Text" />
+                        <TextWidget Text="@MemberName" HorizontalAlignment="Left" VerticalAlignment="Bottom" MarginLeft="15" MarginBottom="6" Brush="Clan.TabControl.Text" />
+                        <TextWidget Text="@BenefitText" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="15" Brush="Clan.TabControl.Text" />
+                      </Children>
+                    </Widget>
+                  </ItemTemplate>
+                </ListPanel>
+              </Children>
+            </Widget>
+
+          </Children>
+        </Widget>
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

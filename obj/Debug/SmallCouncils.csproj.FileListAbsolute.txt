@@ -1,0 +1,9 @@
+D:\GitHub\Councils\bin\Debug\SmallCouncils.dll
+D:\GitHub\Councils\bin\Debug\SmallCouncils.pdb
+D:\GitHub\Councils\obj\Debug\SmallCouncils.csproj.AssemblyReference.cache
+D:\GitHub\Councils\obj\Debug\SmallCouncils.GeneratedMSBuildEditorConfig.editorconfig
+D:\GitHub\Councils\obj\Debug\SmallCouncils.AssemblyInfoInputs.cache
+D:\GitHub\Councils\obj\Debug\SmallCouncils.AssemblyInfo.cs
+D:\GitHub\Councils\obj\Debug\SmallCouncils.csproj.CoreCompileInputs.cache
+D:\GitHub\Councils\obj\Debug\SmallCouncils.dll
+D:\GitHub\Councils\obj\Debug\SmallCouncils.pdb
