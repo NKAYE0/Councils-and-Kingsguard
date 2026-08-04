@@ -110,11 +110,11 @@ namespace SmallCouncils.UI.Assignment
             CandidateList.Clear();
 
             System.Collections.Generic.List<Hero> candidates = CouncilAssignmentService.GetEligibleCandidatesForPosition(_kingdom, position);
-            candidates.Sort((a, b) => GetRelevantSkillValue(position, b).CompareTo(GetRelevantSkillValue(position, a)));
+            candidates.Sort((a, b) => CouncilPositionSkillDisplay.GetRelevantSkillValue(position, a).CompareTo(CouncilPositionSkillDisplay.GetRelevantSkillValue(position, b)));
 
             foreach (Hero hero in candidates)
             {
-                CandidateList.Add(new CouncilCandidateItemVM(hero, GetRelevantSkillText(position, hero), OnCandidateSelected));
+                CandidateList.Add(new CouncilCandidateItemVM(hero, CouncilPositionSkillDisplay.GetRelevantSkillText(position, hero), OnCandidateSelected));
             }
 
             PickerTitleText = "Select a candidate";
@@ -126,11 +126,11 @@ namespace SmallCouncils.UI.Assignment
             CandidateList.Clear();
 
             System.Collections.Generic.List<Hero> candidates = CouncilAssignmentService.GetEligibleCandidatesForKingsguard(_kingdom);
-            candidates.Sort((a, b) => GetVigorSkillValue(b).CompareTo(GetVigorSkillValue(a)));
+            candidates.Sort((a, b) => CouncilPositionSkillDisplay.GetVigorSkillValue(a).CompareTo(CouncilPositionSkillDisplay.GetVigorSkillValue(b)));
 
             foreach (Hero hero in candidates)
             {
-                CandidateList.Add(new CouncilCandidateItemVM(hero, $"Vigor: {GetVigorSkillValue(hero)}", OnCandidateSelected));
+                CandidateList.Add(new CouncilCandidateItemVM(hero, $"Vigor: {CouncilPositionSkillDisplay.GetVigorSkillValue(hero)}", OnCandidateSelected));
             }
 
             PickerTitleText = "Select a Kingsguard member";
@@ -202,63 +202,6 @@ namespace SmallCouncils.UI.Assignment
             {
                 item.RefreshFromData();
             }
-        }
-
-        private static string GetRelevantSkillText(CouncilPosition position, Hero hero)
-        {
-            switch (position)
-            {
-                case CouncilPosition.GrandMaester:
-                    return $"Medicine: {hero.GetSkillValue(DefaultSkills.Medicine)}";
-                case CouncilPosition.MasterOfCoin:
-                    return $"Steward: {hero.GetSkillValue(DefaultSkills.Steward)}";
-                case CouncilPosition.MasterOfLaws:
-                    return $"Leadership: {hero.GetSkillValue(DefaultSkills.Leadership)}";
-                case CouncilPosition.MasterOfWhisperers:
-                    return $"Roguery: {hero.GetSkillValue(DefaultSkills.Roguery)}";
-                case CouncilPosition.MasterOfShips:
-                    SkillObject shipmaster = SmallCouncils.Services.NavalSkillLookup.ShipmasterSkill;
-                    return shipmaster != null ? $"Shipmaster: {hero.GetSkillValue(shipmaster)}" : string.Empty;
-                case CouncilPosition.LordCommanderOfKingsguard:
-                    return $"Vigor: {GetVigorSkillValue(hero)}";
-                default:
-                    return string.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Numeric value of whichever skill matters for this position, used
-        /// to sort the candidate picker with the best-suited heroes first.
-        /// Positions with no relevant skill (Hand of the King) sort as 0 —
-        /// GetRelevantCandidatesForPosition doesn't offer a picker sorted by
-        /// skill for those anyway, so this is just a safe default.
-        /// </summary>
-        private static int GetRelevantSkillValue(CouncilPosition position, Hero hero)
-        {
-            switch (position)
-            {
-                case CouncilPosition.GrandMaester:
-                    return hero.GetSkillValue(DefaultSkills.Medicine);
-                case CouncilPosition.MasterOfCoin:
-                    return hero.GetSkillValue(DefaultSkills.Steward);
-                case CouncilPosition.MasterOfLaws:
-                    return hero.GetSkillValue(DefaultSkills.Leadership);
-                case CouncilPosition.MasterOfWhisperers:
-                    return hero.GetSkillValue(DefaultSkills.Roguery);
-                case CouncilPosition.MasterOfShips:
-                    SkillObject shipmaster = SmallCouncils.Services.NavalSkillLookup.ShipmasterSkill;
-                    return shipmaster != null ? hero.GetSkillValue(shipmaster) : 0;
-                case CouncilPosition.LordCommanderOfKingsguard:
-                    return GetVigorSkillValue(hero);
-                default:
-                    return 0;
-            }
-        }
-
-        private static int GetVigorSkillValue(Hero hero)
-        {
-            return System.Math.Max(hero.GetSkillValue(DefaultSkills.OneHanded),
-                System.Math.Max(hero.GetSkillValue(DefaultSkills.TwoHanded), hero.GetSkillValue(DefaultSkills.Polearm)));
         }
 
         // ============================================================

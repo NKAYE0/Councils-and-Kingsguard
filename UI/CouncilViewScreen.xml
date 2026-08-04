@@ -1,0 +1,92 @@
+<Prefab>
+  <Constants>
+  </Constants>
+  <Window>
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+      <Children>
+
+        <!-- Dimmed background -->
+        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#000000CC" />
+
+        <!-- Main panel -->
+        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1500" SuggestedHeight="920" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#1A1A1AF0">
+          <Children>
+
+            <!-- Header band -->
+            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="110" HorizontalAlignment="Left" VerticalAlignment="Top">
+              <Children>
+
+                <!-- Ruling king/queen: portrait + name/title, far left -->
+                <ImageIdentifierWidget DataSource="{KingPortrait}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="88" SuggestedHeight="88" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="24" />
+                <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="126">
+                  <Children>
+                    <TextWidget Text="@KingName" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="28" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="Clan.TabControl.Text" />
+                    <TextWidget Text="@KingSubtitleText" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="30" Brush="Clan.TabControl.Text" />
+                  </Children>
+                </Widget>
+
+                <!-- Kingdom banner + council title, centered -->
+                <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <Children>
+                    <ImageIdentifierWidget DataSource="{KingdomBanner}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="52" SuggestedHeight="52" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextWidget Text="@TitleText" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="64" Brush="Clan.TabControl.Text" />
+                  </Children>
+                </Widget>
+
+                <ButtonWidget Command.Click="ExecuteClose" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="10" MarginRight="10" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" Brush="Popup.Delete.Button" UpdateChildrenStates="true">
+                  <Children>
+                    <TextWidget Text="X" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Clan.TabControl.Text" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Children>
+                </ButtonWidget>
+
+              </Children>
+            </Widget>
+
+            <!-- Council position list (left column, or full width if no Kingsguard) -->
+            <ListPanel DataSource="{PositionList}" WidthSizePolicy="Fixed" SuggestedWidth="680" HeightSizePolicy="StretchToParent" HorizontalAlignment="Left" MarginLeft="40" MarginTop="130" MarginBottom="40" StackLayout.LayoutMethod="VerticalTopToBottom">
+              <ItemTemplate>
+                <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="100" MarginBottom="10" Sprite="BlankWhiteSquare_9" Color="#2A2A2AF0">
+                  <Children>
+
+                    <!-- Portrait -->
+                    <ImageIdentifierWidget DataSource="{Visual}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="70" SuggestedHeight="70" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="10" />
+
+                    <!-- Three stacked lines to the right of the portrait, each with its own fixed vertical slot so none can overlap another -->
+                    <TextWidget Text="@PositionName" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="92" MarginRight="10" MarginTop="8" Brush="Clan.TabControl.Text" />
+                    <TextWidget Text="@AssigneeName" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="92" MarginRight="10" MarginTop="36" Brush="Clan.TabControl.Text" />
+                    <TextWidget Text="@BenefitText" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="92" MarginRight="10" MarginTop="64" Brush="Clan.TabControl.Text" />
+
+                  </Children>
+                </Widget>
+              </ItemTemplate>
+            </ListPanel>
+
+            <!-- Kingsguard roster (right column, only visible for the player's own kingdom) -->
+            <Widget IsVisible="@ShowKingsguard" WidthSizePolicy="Fixed" SuggestedWidth="680" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" MarginRight="40" MarginTop="130" MarginBottom="40">
+              <Children>
+                <TextWidget Text="Kingsguard" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Top" Brush="Clan.TabControl.Text" />
+                <ListPanel DataSource="{KingsguardList}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="35" StackLayout.LayoutMethod="VerticalTopToBottom">
+                  <ItemTemplate>
+                    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="100" MarginBottom="10" Sprite="BlankWhiteSquare_9" Color="#2A2A2AF0">
+                      <Children>
+
+                        <ImageIdentifierWidget DataSource="{Visual}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="70" SuggestedHeight="70" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="10" />
+
+                        <TextWidget Text="@SlotLabel" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="92" MarginRight="10" MarginTop="8" Brush="Clan.TabControl.Text" />
+                        <TextWidget Text="@MemberName" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="92" MarginRight="10" MarginTop="36" Brush="Clan.TabControl.Text" />
+                        <TextWidget Text="@BenefitText" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="92" MarginRight="10" MarginTop="64" Brush="Clan.TabControl.Text" />
+
+                      </Children>
+                    </Widget>
+                  </ItemTemplate>
+                </ListPanel>
+              </Children>
+            </Widget>
+
+          </Children>
+        </Widget>
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GitHub\\Councils\\SmallCouncils.csproj",
+      "projectUniqueName": "D:\\GitHub\\Councils\\CouncilsandKingsguard\\SmallCouncils.csproj",
       "projectName": "SmallCouncils",
-      "projectPath": "D:\\GitHub\\Councils\\SmallCouncils.csproj",
+      "projectPath": "D:\\GitHub\\Councils\\CouncilsandKingsguard\\SmallCouncils.csproj",
       "packagesPath": "C:\\Users\\NK\\.nuget\\packages\\",
-      "outputPath": "D:\\GitHub\\Councils\\obj\\",
+      "outputPath": "D:\\GitHub\\Councils\\CouncilsandKingsguard\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -178,6 +178,8 @@ namespace SmallCouncils.Services
             }
 
             AnnounceAssignment(ruler, hero, position);
+
+            AIInfluenceIntegrationService.NotifyPositionAssigned(kingdom, position, hero);
         }
 
         /// <summary>
@@ -234,6 +236,8 @@ namespace SmallCouncils.Services
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(previousHolder, ruler, loss, true);
                 }
             }
+
+            AIInfluenceIntegrationService.NotifyPositionUnassigned(kingdom, position, previousHolder);
         }
 
         // ============================================================
@@ -428,9 +432,19 @@ namespace SmallCouncils.Services
                         continue;
                     }
 
-                    bool eligible = position == CouncilPosition.LordCommanderOfKingsguard
-                        ? IsMemberOfPlayerClan(hero)
-                        : IsEligibleLordOrLadyForKingdom(hero, kingdom);
+                    bool eligible;
+                    if (position == CouncilPosition.LordCommanderOfKingsguard)
+                    {
+                        eligible = IsMemberOfPlayerClan(hero);
+                    }
+                    else if (position == CouncilPosition.HandOfTheKing)
+                    {
+                        eligible = IsEligibleLordOrLadyForKingdom(hero, kingdom) && hero == hero.Clan.Leader;
+                    }
+                    else
+                    {
+                        eligible = IsEligibleLordOrLadyForKingdom(hero, kingdom);
+                    }
 
                     if (eligible)
                     {
