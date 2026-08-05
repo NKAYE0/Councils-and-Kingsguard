@@ -1,3 +1,4 @@
+using System.Linq;
 using MCM.Abstractions.Attributes;
 using MCM.Abstractions.Attributes.v2;
 using MCM.Abstractions.Base.Global;
@@ -41,6 +42,36 @@ namespace SmallCouncils.Settings
         [SettingPropertyInteger("Hand of the King re-evaluation interval (weeks)", 1, 52, HintText = "How often AI kingdoms reconsider whether a different clan leader would make a better Hand of the King.", Order = 2)]
         [SettingPropertyGroup("General")]
         public int HandReevaluationIntervalWeeks { get; set; } = 12;
+
+        // ============================================================
+        // AIInfluence Integration
+        // ============================================================
+
+        [SettingPropertyBool("Enable AIInfluence integration", HintText = "When enabled and AIInfluence is installed, council appointments/removals are fed to AIInfluence so NPCs can become aware of and comment on them. Turn off if you don't use AIInfluence, or don't want this integration.", Order = 1)]
+        [SettingPropertyGroup("AIInfluence Integration")]
+        public bool EnableAIInfluenceIntegration { get; set; } = IsAIInfluenceInstalled();
+
+        /// <summary>
+        /// Deliberately just an assembly-presence check, not a full API
+        /// validation — this only picks a sensible one-time default (only
+        /// matters the very first time the mod loads with no saved MCM
+        /// settings file yet; every load after that just reads whatever
+        /// was persisted). If AIInfluence turns out to be an incompatible
+        /// version, the toggle would default to on but
+        /// AIInfluenceIntegrationService's own fuller detection would still
+        /// safely no-op, so the worst case here is harmless.
+        /// </summary>
+        private static bool IsAIInfluenceInstalled()
+        {
+            try
+            {
+                return System.AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "AIInfluence");
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         // ============================================================
         // Relations — gained on assignment

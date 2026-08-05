@@ -22,11 +22,25 @@ namespace SmallCouncils.Services
     ///   this is what lets a council member bring up their position with
     ///   pride whenever the player is talking to them specifically, not
     ///   just in the days right after being appointed. Explicitly expired
-    ///   early on unassignment (found again via a deterministic Id, so this
-    ///   survives a save/reload between assignment and removal).
-    /// - A normal short-lived "news" event, created on unassignment, so
-    ///   other NPCs can comment on the removal as recent news — this one
-    ///   uses the same short lifespan as before.
+    ///   early on unassignment.
+    /// - A short-lived "unhappy" news event, created on unassignment (14
+    ///   days — 2 weeks), so other NPCs can comment on the removal as
+    ///   recent news. Explicitly expired early if the hero receives any new
+    ///   assignment before it naturally lapses.
+    ///
+    /// Reduced-clutter design: every event Id is deterministic (kingdom +
+    /// position + hero for the ongoing-status kind, just hero for the
+    /// unhappy kind), so before creating anything we always check
+    /// GetEventById first. If a matching event already exists (e.g. this
+    /// hero previously held this exact position, or already has a pending
+    /// unhappy event from an earlier removal), we update its Title/
+    /// Description/ExpirationTime in place rather than calling AddEvent
+    /// again. AddEvent is only ever called for a genuinely new event. This
+    /// doesn't touch anything about how AIInfluence itself decides whether
+    /// to show a notification — it just means we ask it to add something
+    /// new far less often over a long playthrough with repeated council
+    /// churn, which reduces however many notifications that produces
+    /// without risking any change to AIInfluence's own behavior.
     ///
     /// AIInfluence is an entirely optional dependency, exactly like
     /// ROT/NavalDLC elsewhere in this mod — everything here is done via
@@ -39,7 +53,10 @@ namespace SmallCouncils.Services
     /// SOURCED (not guessed) via reflection against your actual AIInfluence.dll:
     /// - AIInfluence.DynamicEvents.DynamicEventsManager.Instance (static)
     /// - .AddEvent(DynamicEvent) and .GetEventById(string) -> DynamicEvent —
-    ///   both public instance methods
+    ///   both public instance methods, and confirmed (via a second targeted
+    ///   reflection pass) that AddEvent has no other overloads and that
+    ///   neither DynamicEvent nor DynamicEventsManager expose any kind of
+    ///   "silent"/"suppress notification" flag, public or private.
     /// - AIInfluence.DynamicEvents.DynamicEvent — parameterless constructor;
     ///   Id/Type/Title/Description/PlayerInvolved/Importance (string/string/
     ///   string/string/bool/int, all writable); CharactersInvolved and
@@ -55,19 +72,11 @@ namespace SmallCouncils.Services
     ///   CampaignTime.Now.ToDays-style in-game day counters, paired with the
     ///   DateTime fields above. If AIInfluence doesn't actually read these
     ///   for anything, leaving them at 0 is harmless either way.
-    /// - Forcing early expiration by setting ExpirationTime on an existing
-    ///   event (found via GetEventById) to DateTime.UtcNow — reasonable
-    ///   inference given ExpirationTime is a plain settable property, but
-    ///   not confirmed that AIInfluence re-checks expiration on existing
-    ///   events versus only at creation time. If NPCs keep referencing a
-    ///   removed position as ongoing after this, that's the first thing to
-    ///   revisit — MarkDiplomaticEventAsCompleted (also confirmed to exist)
-    ///   would be the alternative to try, though its name suggests it may
-    ///   be specific to diplomatic-type events rather than general-purpose.
-    /// - News event lifespan default (14 days) — AIInfluence exposes its
-    ///   own "Event Lifespan (Days)" MCM setting for events IT generates,
-    ///   but we have no way to read that setting's current value for events
-    ///   WE create, so this is our own independent default.
+    /// - Forcing early/updated expiration by setting ExpirationTime on an
+    ///   existing event (found via GetEventById) — reasonable inference
+    ///   given ExpirationTime is a plain settable property, but not
+    ///   confirmed that AIInfluence re-checks expiration on existing events
+    ///   versus only at creation time.
     /// </summary>
     public static class AIInfluenceIntegrationService
     {
@@ -96,19 +105,35 @@ namespace SmallCouncils.Services
         private static PropertyInfo _applicableNpcsProp;
         private static PropertyInfo _participatingKingdomsProp;
 
+        /// <summary>
+        /// True only when the MCM toggle is on AND AIInfluence is actually
+        /// installed/detected — used elsewhere (CouncilAssignmentService) to
+        /// decide whether Small Councils' own native chat announcement
+        /// should be skipped in favor of AIInfluence's own generated
+        /// message for the same appointment/removal, avoiding a duplicate.
+        /// </summary>
+        public static bool IsActive()
+        {
+            return SmallCouncils.Settings.CouncilSettings.Instance?.EnableAIInfluenceIntegration == true && EnsureInitialized();
+        }
+
         public static void NotifyPositionAssigned(Kingdom kingdom, CouncilPosition position, Hero assignee)
         {
-            if (!EnsureInitialized() || kingdom == null || assignee == null)
+            if (!IsActive() || kingdom == null || assignee == null)
             {
                 return;
             }
 
             try
             {
+                object manager = _managerInstanceProp.GetValue(null);
+
                 // A new assignment (to this position or any other) resolves
-                // any lingering unhappiness from a previous removal.
+                // any lingering unhappiness from a previous removal — just
+                // expire it early rather than deleting it, since we don't
+                // have a delete API and an expired event is inert either way.
                 string unhappinessId = BuildUnhappinessEventId(assignee);
-                object existingUnhappiness = _getEventByIdMethod.Invoke(_managerInstanceProp.GetValue(null), new object[] { unhappinessId });
+                object existingUnhappiness = _getEventByIdMethod.Invoke(manager, new object[] { unhappinessId });
                 if (existingUnhappiness != null)
                 {
                     _expirationTimeProp.SetValue(existingUnhappiness, DateTime.UtcNow);
@@ -123,8 +148,9 @@ namespace SmallCouncils.Services
 
                 List<Hero> involved = BuildInvolvedCircle(kingdom, assignee, ruler);
                 string id = BuildOngoingStatusEventId(kingdom, position, assignee);
-                RaiseEvent(id, OngoingStatusTypeTag, kingdom, title, description, involved,
-                    DateTime.UtcNow.AddYears(OngoingStatusLifespanYears));
+                DateTime expiration = DateTime.UtcNow.AddYears(OngoingStatusLifespanYears);
+
+                UpdateExistingOrCreateEvent(manager, id, OngoingStatusTypeTag, kingdom, title, description, involved, expiration);
             }
             catch
             {
@@ -134,23 +160,23 @@ namespace SmallCouncils.Services
 
         public static void NotifyPositionUnassigned(Kingdom kingdom, CouncilPosition position, Hero formerHolder)
         {
-            if (!EnsureInitialized() || kingdom == null || formerHolder == null)
+            if (!IsActive() || kingdom == null || formerHolder == null)
             {
                 return;
             }
 
             try
             {
+                object manager = _managerInstanceProp.GetValue(null);
+
                 // Close out the long-lived "ongoing status" event from when
                 // this hero was assigned, so they stop being referenced as
-                // currently holding the position. Reconstructed deterministically
-                // rather than tracked in memory, so this works correctly even
-                // if the game was saved/reloaded between assignment and removal.
+                // currently holding the position.
                 string ongoingId = BuildOngoingStatusEventId(kingdom, position, formerHolder);
-                object existingEvent = _getEventByIdMethod.Invoke(_managerInstanceProp.GetValue(null), new object[] { ongoingId });
-                if (existingEvent != null)
+                object existingOngoing = _getEventByIdMethod.Invoke(manager, new object[] { ongoingId });
+                if (existingOngoing != null)
                 {
-                    _expirationTimeProp.SetValue(existingEvent, DateTime.UtcNow);
+                    _expirationTimeProp.SetValue(existingOngoing, DateTime.UtcNow);
                 }
 
                 Hero ruler = kingdom.Leader;
@@ -160,8 +186,9 @@ namespace SmallCouncils.Services
 
                 List<Hero> involved = BuildInvolvedCircle(kingdom, formerHolder, ruler);
                 string newsId = BuildUnhappinessEventId(formerHolder);
-                RaiseEvent(newsId, NewsTypeTag, kingdom, title, description, involved,
-                    DateTime.UtcNow.AddDays(NewsEventLifespanDays));
+                DateTime expiration = DateTime.UtcNow.AddDays(NewsEventLifespanDays);
+
+                UpdateExistingOrCreateEvent(manager, newsId, NewsTypeTag, kingdom, title, description, involved, expiration);
             }
             catch
             {
@@ -169,9 +196,9 @@ namespace SmallCouncils.Services
         }
 
         /// <summary>
-        /// Deterministic per (kingdom, position, hero) — lets unassignment
-        /// find and expire the exact same event later without needing any
-        /// separately-tracked, save-fragile state.
+        /// Deterministic per (kingdom, position, hero) — lets a later call
+        /// find and either close or refresh the exact same event, without
+        /// needing any separately-tracked, save-fragile state.
         /// </summary>
         private static string BuildOngoingStatusEventId(Kingdom kingdom, CouncilPosition position, Hero hero)
         {
@@ -220,8 +247,28 @@ namespace SmallCouncils.Services
             return result;
         }
 
-        private static void RaiseEvent(string id, string typeTag, Kingdom kingdom, string title, string description, List<Hero> involvedHeroes, DateTime expirationTime)
+        /// <summary>
+        /// Checked via GetEventById first — if an event with this exact Id
+        /// already exists (this hero previously held this exact position,
+        /// or already has a pending unhappy event), its content is updated
+        /// in place and AddEvent is never called. Only a genuinely new Id
+        /// results in an AddEvent call — this is the actual clutter
+        /// reduction, since it means we call AddEvent far less often over a
+        /// long playthrough with repeated council churn, without touching
+        /// anything about how AIInfluence itself decides whether to notify.
+        /// </summary>
+        private static void UpdateExistingOrCreateEvent(object manager, string id, string typeTag, Kingdom kingdom, string title, string description, List<Hero> involvedHeroes, DateTime expirationTime)
         {
+            object existing = _getEventByIdMethod.Invoke(manager, new object[] { id });
+            if (existing != null)
+            {
+                _titleProp.SetValue(existing, title);
+                _descriptionProp.SetValue(existing, description);
+                _expirationTimeProp.SetValue(existing, expirationTime);
+                _playerInvolvedProp.SetValue(existing, involvedHeroes.Any(h => h == Hero.MainHero));
+                return;
+            }
+
             object dynamicEvent = Activator.CreateInstance(_dynamicEventType);
 
             _idProp.SetValue(dynamicEvent, id);
@@ -250,7 +297,6 @@ namespace SmallCouncils.Services
                 participatingKingdoms.Add(kingdom.StringId);
             }
 
-            object manager = _managerInstanceProp.GetValue(null);
             _addEventMethod.Invoke(manager, new[] { dynamicEvent });
         }
 

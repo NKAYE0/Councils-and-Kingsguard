@@ -198,6 +198,13 @@ namespace SmallCouncils.Services
                 return;
             }
 
+            // AIInfluence generates its own message for this same appointment
+            // when its integration is active — skip ours to avoid a duplicate.
+            if (AIInfluenceIntegrationService.IsActive())
+            {
+                return;
+            }
+
             string pronoun = ruler.IsFemale ? "her" : "his";
             string positionName = CouncilPositionDisplay.GetName(position);
             string text = $"{ruler.Name} has named {hero.Name} as {pronoun} {positionName}.";
