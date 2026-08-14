@@ -494,7 +494,7 @@ namespace SmallCouncils.Services
 
             foreach (Hero hero in Hero.MainHero.Clan.Heroes)
             {
-                if (hero == null || !hero.IsAlive)
+                if (hero == null || !hero.IsAlive || hero.Age < MinimumCouncilAge)
                 {
                     continue;
                 }
@@ -529,14 +529,17 @@ namespace SmallCouncils.Services
             return kingdom.Leader == Hero.MainHero;
         }
 
+        /// <summary>Bannerlord's own coming-of-age threshold — characters below this can't fight, marry, or hold any real responsibility. Shared with CouncilAIBehavior's own candidate-finding logic.</summary>
+        public const float MinimumCouncilAge = 18f;
+
         private static bool IsMemberOfPlayerClan(Hero hero)
         {
-            return hero != Hero.MainHero && hero.Clan != null && hero.Clan == Hero.MainHero.Clan;
+            return hero != Hero.MainHero && hero.Clan != null && hero.Clan == Hero.MainHero.Clan && hero.Age >= MinimumCouncilAge;
         }
 
         private static bool IsEligibleLordOrLadyForKingdom(Hero hero, Kingdom kingdom)
         {
-            if (hero.Clan == null || !hero.IsLord || hero.Clan.IsMinorFaction || hero.Clan.IsClanTypeMercenary)
+            if (hero.Clan == null || !hero.IsLord || hero.Clan.IsMinorFaction || hero.Clan.IsClanTypeMercenary || hero.Age < MinimumCouncilAge)
             {
                 return false;
             }

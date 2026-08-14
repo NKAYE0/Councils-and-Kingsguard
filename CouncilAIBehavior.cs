@@ -274,7 +274,7 @@ namespace SmallCouncils.Behaviors
 
             foreach (Clan clan in kingdom.Clans)
             {
-                if (clan == rulingClan || clan.IsMinorFaction || clan.IsClanTypeMercenary || clan.Leader == null || !clan.Leader.IsAlive)
+                if (clan == rulingClan || clan.IsMinorFaction || clan.IsClanTypeMercenary || clan.Leader == null || !clan.Leader.IsAlive || clan.Leader.Age < CouncilAssignmentService.MinimumCouncilAge)
                 {
                     continue;
                 }
@@ -307,7 +307,7 @@ namespace SmallCouncils.Behaviors
 
             foreach (Hero hero in rulingClan.Heroes)
             {
-                if (hero == null || !hero.IsAlive || hero.IsFemale || !hero.IsLord || hero == kingdom.Leader)
+                if (hero == null || !hero.IsAlive || hero.IsFemale || !hero.IsLord || hero == kingdom.Leader || hero.Age < CouncilAssignmentService.MinimumCouncilAge)
                 {
                     continue;
                 }
@@ -342,7 +342,7 @@ namespace SmallCouncils.Behaviors
 
                 foreach (Hero hero in clan.Heroes)
                 {
-                    if (hero == null || !hero.IsAlive || !hero.IsLord || hero == kingdom.Leader)
+                    if (hero == null || !hero.IsAlive || !hero.IsLord || hero == kingdom.Leader || hero.Age < CouncilAssignmentService.MinimumCouncilAge)
                     {
                         continue;
                     }
