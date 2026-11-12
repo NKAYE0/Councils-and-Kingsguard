@@ -21,16 +21,16 @@ namespace SmallCouncils.UI.Encyclopedia
     ///   entity being viewed, typed System.Object) was confirmed via
     ///   reflection on the base type.
     ///
-    /// COMMAND HANDLING MOVED: like the Kingdom screen button, the click
-    /// command never actually fired despite [DataSourceMethod] and a working
-    /// UIExtenderEx update — confirmed via testing that hover/click both
-    /// reach the widget (native highlight + click sound) but the bound
-    /// command itself never executes. This points to a genuine break in
-    /// UIExtenderEx's own ExecuteCommand interception on this Bannerlord
-    /// version. Click handling now lives in CouncilCommandRoutingPatch, a
-    /// direct Harmony patch that bypasses UIExtenderEx's command routing
-    /// entirely. This mixin now only carries the properties that DO work
-    /// (text, visibility) through normal property binding.
+    /// UPDATE (Bannerlord 1.4.8 / UIExtenderEx 3.0.3 compatibility fix):
+    /// the Harmony-postfix-on-ViewModel.ExecuteCommand workaround that used
+    /// to live here (CouncilCommandRoutingPatch, now deleted) stopped firing
+    /// once UIExtenderEx's Compiled Prefabs engine became the default
+    /// (v3.0+): mixin [DataSourceMethod] commands are now resolved via
+    /// direct generated calls (ViewModelMixins.Get&lt;TMixin&gt;(vm).ExecuteX())
+    /// rather than by routing through ViewModel.ExecuteCommand, so a plain
+    /// Harmony patch on that method never saw them. Restoring a real
+    /// [DataSourceMethod] here is the path the compiled-prefab pipeline
+    /// actually resolves, and confirmed fixed (2026-11-12) against 1.4.8.
     /// </summary>
     [ViewModelMixin("RefreshValues")]
     public class EncyclopediaCouncilButtonMixin : BaseViewModelMixin<EncyclopediaFactionPageVM>
@@ -78,6 +78,21 @@ namespace SmallCouncils.UI.Encyclopedia
                     _councilButtonText = value;
                     OnPropertyChangedWithValue(value, nameof(CouncilButtonText));
                 }
+            }
+        }
+
+        /// <summary>
+        /// Bound via Command.Click="OpenCouncilView" on
+        /// EncyclopediaCouncilButton (EncyclopediaCouncilButtonPrefabPatch.cs).
+        /// Works for any kingdom being viewed, not just the player's own —
+        /// purely informational, unlike the Kingdom Management button.
+        /// </summary>
+        [DataSourceMethod]
+        public void ExecuteOpenCouncilView()
+        {
+            if (_vm.Obj is Kingdom kingdom)
+            {
+                CouncilScreenManager.OpenViewScreen(kingdom);
             }
         }
     }

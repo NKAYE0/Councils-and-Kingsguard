@@ -72,6 +72,22 @@ namespace SmallCouncils.UI.KingdomButton
     /// logic (returns early if not the ruler) rather than via the widget's
     /// native disabled-state rendering, which was silently eating the text
     /// for reasons never fully diagnosed beyond "IsEnabled is the trigger".
+
+    /// COMMAND NAME UPDATE (Bannerlord 1.4.8 / UIExtenderEx 3.0.3 fix):
+    /// Command.Click is now "@ExecuteOpenCouncil", bound to a real
+    /// [DataSourceMethod] ExecuteOpenCouncil() on CouncilButtonMixin. The
+    /// earlier arbitrary string "SmallCouncils_OpenCouncil" relied on a
+    /// Harmony postfix on ViewModel.ExecuteCommand (CouncilCommandRoutingPatch,
+    /// now deleted) that stopped being reached once UIExtenderEx's Compiled
+    /// Prefabs engine (default since 3.0) started resolving mixin commands
+    /// via direct generated calls instead of routing through
+    /// ExecuteCommand. NOTE: the first attempt at this fix used
+    /// Command.Click="OpenCouncil" (no "@", "Execute" prefix stripped) —
+    /// wrong on both counts. UIExtenderEx's own ViewModelMixin.md example
+    /// confirms mixin commands are bound with the "@" sigil AND the full
+    /// method name including "Execute", exactly like property bindings
+    /// (e.g. Command.Click="@ExecuteResetSetting" for ExecuteResetSetting()).
+    /// See CouncilButtonMixin.cs for the full explanation.
     /// </summary>
     [PrefabExtension("KingdomManagement", "descendant::Widget[@Id='AbdicateLeadershipButton']")]
     public class CouncilButtonPrefabPatch : PrefabExtensionInsertPatch
@@ -95,9 +111,9 @@ namespace SmallCouncils.UI.KingdomButton
             // MarginRight(290) + Width/2(140) = 430; ours (width 150) needs
             // MarginRight = 430 - 75 = 355 for the same center.
             _document.LoadXml(
-                "<ButtonWidget Id=\"CouncilButton\" DoNotPassEventsToChildren=\"true\" WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"150\" SuggestedHeight=\"30\" HorizontalAlignment=\"Right\" VerticalAlignment=\"Top\" MarginRight=\"355\" MarginTop=\"66\" Brush=\"ButtonBrush2\" Command.Click=\"SmallCouncils_OpenCouncil\" UpdateChildrenStates=\"true\" GamepadNavigationIndex=\"0\">" +
+                "<ButtonWidget Id=\"CouncilButton\" DoNotPassEventsToChildren=\"true\" WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"150\" SuggestedHeight=\"30\" HorizontalAlignment=\"Right\" VerticalAlignment=\"Top\" MarginRight=\"355\" MarginTop=\"66\" Brush=\"ButtonBrush2\" Command.Click=\"@ExecuteOpenCouncil\" UpdateChildrenStates=\"true\" GamepadNavigationIndex=\"0\">" +
                 "<Children>" +
-                "<TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"StretchToParent\" Brush=\"Clan.TabControl.Text\" Text=\"Council\" />" +
+                "<TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"StretchToParent\" Brush=\"Clan.TabControl.Text\" Text=\"@CouncilButtonText\" />" +
                 "</Children>" +
                 "</ButtonWidget>");
         }

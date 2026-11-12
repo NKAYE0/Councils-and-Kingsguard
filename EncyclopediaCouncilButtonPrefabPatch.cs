@@ -46,7 +46,7 @@ namespace SmallCouncils.UI.Encyclopedia
             _document = new XmlDocument();
 
             _document.LoadXml(
-                "<ButtonWidget Id=\"EncyclopediaCouncilButton\" IsVisible=\"@IsCouncilVisible\" DoNotPassEventsToChildren=\"true\" WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"227\" SuggestedHeight=\"40\" HorizontalAlignment=\"Left\" MarginLeft=\"160\" MarginTop=\"10\" PositionYOffset=\"-70\" Brush=\"ButtonBrush2\" Command.Click=\"SmallCouncils_OpenCouncilView\" UpdateChildrenStates=\"true\" GamepadNavigationIndex=\"0\">" +
+                "<ButtonWidget Id=\"EncyclopediaCouncilButton\" IsVisible=\"@IsCouncilVisible\" DoNotPassEventsToChildren=\"true\" WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"227\" SuggestedHeight=\"40\" HorizontalAlignment=\"Left\" MarginLeft=\"160\" MarginTop=\"10\" PositionYOffset=\"-70\" Brush=\"ButtonBrush2\" Command.Click=\"@ExecuteOpenCouncilView\" UpdateChildrenStates=\"true\" GamepadNavigationIndex=\"0\">" +
                 "<Children>" +
                 "<TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"StretchToParent\" Brush=\"Kingdom.GeneralButtons.Text\" Text=\"@CouncilButtonText\" />" +
                 "</Children>" +
