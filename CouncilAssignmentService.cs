@@ -173,7 +173,7 @@ namespace SmallCouncils.Services
                 int gain = CouncilConstants.GetAssignRelationGain(position);
                 if (gain != 0)
                 {
-                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, ruler, gain, true);
+                    SmallCouncils.HarmonyPatches.CouncilRelationChange.ApplyWithoutCharmXp(hero, ruler, gain, true);
                 }
             }
 
@@ -240,7 +240,7 @@ namespace SmallCouncils.Services
                 int loss = CouncilConstants.GetUnassignRelationLoss(position);
                 if (loss != 0)
                 {
-                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(previousHolder, ruler, loss, true);
+                    SmallCouncils.HarmonyPatches.CouncilRelationChange.ApplyWithoutCharmXp(previousHolder, ruler, loss, true);
                 }
             }
 

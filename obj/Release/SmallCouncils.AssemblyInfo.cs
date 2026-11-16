@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmallCouncils")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2821c68b73d24fee60cc41fe03d429e0ba630af0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7fb5f9111298075494fe12a6ad622154c5e67378")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmallCouncils")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmallCouncils")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
