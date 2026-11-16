@@ -93,15 +93,19 @@ namespace SmallCouncils.UI.Assignment
 
         private void OnPositionSelected(CouncilPositionItemVM item)
         {
+            ClearRowSelection();
             _selectedPosition = item;
             _selectedSlot = null;
+            item.IsSelected = true;
             OpenPickerForPosition(item.Position);
         }
 
         private void OnKingsguardSlotSelected(CouncilKingsguardSlotItemVM item)
         {
+            ClearRowSelection();
             _selectedSlot = item;
             _selectedPosition = null;
+            item.IsSelected = true;
             OpenPickerForKingsguard(item.SlotIndex);
         }
 
@@ -187,8 +191,23 @@ namespace SmallCouncils.UI.Assignment
         {
             IsPickerVisible = false;
             CandidateList.Clear();
+            ClearRowSelection();
             _selectedPosition = null;
             _selectedSlot = null;
+        }
+
+        // Removes the "being edited" highlight from whichever row has it.
+        private void ClearRowSelection()
+        {
+            if (_selectedPosition != null)
+            {
+                _selectedPosition.IsSelected = false;
+            }
+
+            if (_selectedSlot != null)
+            {
+                _selectedSlot.IsSelected = false;
+            }
         }
 
         private void RefreshAllRows()

@@ -1,0 +1,10 @@
+C:\Users\NK\AppData\Local\Temp\claude\8d460a6efbc40199\229b3b7e-bcea-4de4-a738-df13f32d9335\scratchpad\build\SmallCouncils.dll
+C:\Users\NK\AppData\Local\Temp\claude\8d460a6efbc40199\229b3b7e-bcea-4de4-a738-df13f32d9335\scratchpad\build\SmallCouncils.pdb
+D:\GitHub\Councils\CouncilsandKingsguard\obj\Release\SmallCouncils.csproj.AssemblyReference.cache
+D:\GitHub\Councils\CouncilsandKingsguard\obj\Release\SmallCouncils.GeneratedMSBuildEditorConfig.editorconfig
+D:\GitHub\Councils\CouncilsandKingsguard\obj\Release\SmallCouncils.AssemblyInfoInputs.cache
+D:\GitHub\Councils\CouncilsandKingsguard\obj\Release\SmallCouncils.AssemblyInfo.cs
+D:\GitHub\Councils\CouncilsandKingsguard\obj\Release\SmallCouncils.csproj.CoreCompileInputs.cache
+D:\GitHub\Councils\CouncilsandKingsguard\obj\Release\SmallCouncils.sourcelink.json
+D:\GitHub\Councils\CouncilsandKingsguard\obj\Release\SmallCouncils.dll
+D:\GitHub\Councils\CouncilsandKingsguard\obj\Release\SmallCouncils.pdb

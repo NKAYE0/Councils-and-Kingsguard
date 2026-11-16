@@ -173,7 +173,7 @@ namespace SmallCouncils.Services
             }
 
             int stewardSkill = masterOfCoin.GetSkillValue(DefaultSkills.Steward);
-            float multiplier = CouncilSettings.Instance?.MasterOfCoinClanIncomeMultiplier ?? 20f;
+            float multiplier = CouncilSettings.Instance?.MasterOfCoinClanIncomeMultiplier ?? 5f;
             int clanIncome = (int)System.Math.Floor(stewardSkill * multiplier);
             if (clanIncome > 0)
             {

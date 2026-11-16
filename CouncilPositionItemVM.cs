@@ -19,6 +19,7 @@ namespace SmallCouncils.UI.Assignment
         private string _assigneeName;
         private string _relevantStatText;
         private bool _isVacant;
+        private bool _isSelected;
         private ImageIdentifierVM _visual;
 
         public Kingdom Kingdom { get; }
@@ -43,9 +44,8 @@ namespace SmallCouncils.UI.Assignment
             IsVacant = assignee == null;
             AssigneeName = HeroDisplayNameHelper.GetDisplayName(assignee, "Vacant");
 
-            // Hand of the King intentionally excluded — its stat (clan
-            // strength) is only shown in the candidate picker, not here.
-            RelevantStatText = (assignee != null && Position != CouncilPosition.HandOfTheKing)
+            // Shows the stat that matters for this seat (clan strength for the Hand).
+            RelevantStatText = assignee != null
                 ? CouncilPositionSkillDisplay.GetRelevantSkillText(Position, assignee)
                 : string.Empty;
 
@@ -132,6 +132,21 @@ namespace SmallCouncils.UI.Assignment
                 {
                     _visual = value;
                     OnPropertyChangedWithValue(value, nameof(Visual));
+                }
+            }
+        }
+
+        // Highlights this row while its candidate picker is open.
+        [DataSourceProperty]
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (value != _isSelected)
+                {
+                    _isSelected = value;
+                    OnPropertyChangedWithValue(value, nameof(IsSelected));
                 }
             }
         }

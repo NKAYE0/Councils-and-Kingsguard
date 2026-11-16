@@ -6,124 +6,76 @@
       <Children>
 
         <!-- Dimmed background -->
-        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#000000CC" />
+        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#000000FF" AlphaFactor="0.7" />
 
-        <!-- Main panel -->
-        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1500" SuggestedHeight="920" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#1A1A1AF0">
+        <!-- Main popup -->
+        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1570" SuggestedHeight="970" HorizontalAlignment="Center" VerticalAlignment="Center">
           <Children>
-
-            <!-- Header band -->
-            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="110" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <!-- Visible window, inset so the close button sits fully inside the outer container and is clickable everywhere -->
+            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="35" MarginRight="35" MarginTop="35" MarginBottom="35">
               <Children>
 
-                <!-- Ruling king/queen: portrait + name/title, far left -->
-                <ImageIdentifierWidget DataSource="{KingPortrait}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="88" SuggestedHeight="88" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="24" />
-                <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="126">
+                <!-- Native popup canvas, gradient and ornate frame -->
+                <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\order_popup_canvas" />
+                <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\canvas_gradient" />
+                <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="frame_9" ExtendLeft="18" ExtendTop="18" ExtendRight="18" ExtendBottom="18" />
+
+                <!-- Title plate -->
+                <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="640" SuggestedHeight="60" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="22" Sprite="StdAssets\Popup\popper" Color="#DAE374FF">
                   <Children>
-                    <TextWidget Text="@KingName" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="28" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="Clan.TabControl.Text" />
-                    <TextWidget Text="@KingSubtitleText" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="30" Brush="Clan.TabControl.Text" />
+                    <TextWidget Text="@TitleText" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="44" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Info.Text" Brush.FontSize="26" />
                   </Children>
                 </Widget>
 
-                <!-- Kingdom banner + council title, centered -->
-                <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <!-- Ruler portrait, name and title (top left) -->
+                <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="90" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="30" MarginTop="18" Sprite="StdAssets\Popup\tuple_portrait_slot">
                   <Children>
-                    <ImageIdentifierWidget DataSource="{KingdomBanner}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="52" SuggestedHeight="52" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <TextWidget Text="@TitleText" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="64" Brush="Clan.TabControl.Text" />
+                    <ImageIdentifierWidget DataSource="{KingPortrait}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="6" MarginRight="6" MarginTop="6" MarginBottom="6" />
                   </Children>
                 </Widget>
-
-                <ButtonWidget Command.Click="ExecuteClose" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="10" MarginRight="10" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" Brush="Popup.Delete.Button" UpdateChildrenStates="true" DoNotPassEventsToChildren="true">
+                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="162" MarginTop="34" StackLayout.LayoutMethod="VerticalTopToBottom">
                   <Children>
-                    <TextWidget Text="X" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Clan.TabControl.Text" HorizontalAlignment="Center" VerticalAlignment="Center" DoNotAcceptEvents="true" />
+                    <TextWidget Text="@KingName" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MaxWidth="260" Brush="Popup.Tuple.Text" Brush.FontSize="24" Brush.TextHorizontalAlignment="Left" />
+                    <TextWidget Text="@KingSubtitleText" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MaxWidth="260" MarginTop="4" Brush="Popup.Timer.Text" Brush.FontSize="18" Brush.TextHorizontalAlignment="Left" />
                   </Children>
-                </ButtonWidget>
-
-              </Children>
-            </Widget>
-
-            <!-- Council position list (left column) — click a row to open the candidate picker -->
-            <ListPanel DataSource="{PositionList}" WidthSizePolicy="Fixed" SuggestedWidth="680" HeightSizePolicy="StretchToParent" HorizontalAlignment="Left" MarginLeft="40" MarginTop="130" MarginBottom="40" StackLayout.LayoutMethod="VerticalTopToBottom">
-              <ItemTemplate>
-                <ButtonWidget Command.Click="ExecuteSelect" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="86" MarginBottom="10" Brush="Header.Tab.Center" UpdateChildrenStates="true" DoNotPassEventsToChildren="true">
-                  <Children>
-
-                    <ImageIdentifierWidget DataSource="{Visual}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="66" SuggestedHeight="66" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="10" DoNotAcceptEvents="true" />
-
-                    <TextWidget Text="@PositionName" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="90" MarginRight="10" MarginTop="16" Brush="Clan.TabControl.Text" DoNotAcceptEvents="true" />
-                    <TextWidget Text="@AssigneeName" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="90" MarginRight="10" MarginTop="46" Brush="Clan.TabControl.Text" DoNotAcceptEvents="true" />
-
-                  </Children>
-                </ButtonWidget>
-              </ItemTemplate>
-            </ListPanel>
-
-            <!-- Kingsguard roster (right column, 6 slots) — click a slot to open the candidate picker -->
-            <Widget WidthSizePolicy="Fixed" SuggestedWidth="680" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" MarginRight="40" MarginTop="130" MarginBottom="40">
-              <Children>
-                <TextWidget Text="Kingsguard" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Top" Brush="Clan.TabControl.Text" />
-                <ListPanel DataSource="{KingsguardSlotList}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="35" StackLayout.LayoutMethod="VerticalTopToBottom">
-                  <ItemTemplate>
-                    <ButtonWidget Command.Click="ExecuteSelect" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="86" MarginBottom="10" Brush="Header.Tab.Center" UpdateChildrenStates="true" DoNotPassEventsToChildren="true">
-                      <Children>
-
-                        <ImageIdentifierWidget DataSource="{Visual}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="66" SuggestedHeight="66" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="10" DoNotAcceptEvents="true" />
-
-                        <TextWidget Text="@SlotLabel" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="90" MarginRight="10" MarginTop="16" Brush="Clan.TabControl.Text" DoNotAcceptEvents="true" />
-                        <TextWidget Text="@MemberName" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="24" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="90" MarginRight="10" MarginTop="46" Brush="Clan.TabControl.Text" DoNotAcceptEvents="true" />
-
-                      </Children>
-                    </ButtonWidget>
-                  </ItemTemplate>
                 </ListPanel>
-              </Children>
-            </Widget>
 
-          </Children>
-        </Widget>
+                <!-- Kingdom banner, masked into the native pennant shape (top right) -->
+                <MaskedTextureWidget DataSource="{KingdomBanner}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="75" SuggestedHeight="95" HorizontalAlignment="Right" VerticalAlignment="Top" MarginRight="50" MarginTop="12" Brush="Flat.Tuple.Banner.Small" IsDisabled="true" />
 
-        <!-- Candidate picker overlay -->
-        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsPickerVisible">
-          <Children>
-            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#00000099" />
 
-            <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="780" SuggestedHeight="760" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#1E1E1EFA">
-              <Children>
-
-                <TextWidget Text="@PickerTitleText" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="16" MarginLeft="60" MarginRight="60" Brush="Clan.TabControl.Text" />
-
-                <ButtonWidget Command.Click="ExecuteUnassignSelected" HorizontalAlignment="Left" VerticalAlignment="Top" MarginTop="10" MarginLeft="10" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="130" SuggestedHeight="40" Brush="Header.Tab.Center" UpdateChildrenStates="true" DoNotPassEventsToChildren="true">
+                <!-- Two columns: council (left) and Kingsguard (right) -->
+                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginTop="125" MarginBottom="35" StackLayout.LayoutMethod="HorizontalLeftToRight">
                   <Children>
-                    <TextWidget Text="Unassign" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Clan.TabControl.Text" HorizontalAlignment="Center" VerticalAlignment="Center" DoNotAcceptEvents="true" />
-                  </Children>
-                </ButtonWidget>
 
-                <ButtonWidget Command.Click="ExecuteClosePicker" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="10" MarginRight="10" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" Brush="Popup.Delete.Button" UpdateChildrenStates="true" DoNotPassEventsToChildren="true">
-                  <Children>
-                    <TextWidget Text="X" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Clan.TabControl.Text" HorizontalAlignment="Center" VerticalAlignment="Center" DoNotAcceptEvents="true" />
-                  </Children>
-                </ButtonWidget>
-
-                <ScrollablePanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
-                        MarginLeft="20" MarginRight="30" MarginTop="70" MarginBottom="20"
-                        AutoHideScrollBars="true"
-                        ClipRect="CandidateListClipRect"
-                        InnerPanel="CandidateListClipRect\CandidateItemsList"
-                        VerticalScrollbar="..\CandidateListScrollbar\Scrollbar">
-                  <Children>
-                    <Widget Id="CandidateListClipRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
+                    <!-- Council column -->
+                    <Widget WidthSizePolicy="Fixed" SuggestedWidth="680" HeightSizePolicy="StretchToParent" MarginRight="20">
                       <Children>
-                        <ListPanel Id="CandidateItemsList" DataSource="{CandidateList}"
-                                WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-                                StackLayout.LayoutMethod="VerticalTopToBottom">
+                        <BrushWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="Panel.Dent" Brush.ColorFactor="0.2" />
+
+                        <TextWidget Text="Small Council" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="36" VerticalAlignment="Top" MarginTop="8" MarginLeft="24" MarginRight="24" Brush="Popup.Tuple.Text" Brush.FontSize="24" Brush.TextHorizontalAlignment="Left" />
+                        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="2" VerticalAlignment="Top" MarginTop="46" MarginLeft="40" MarginRight="40" Sprite="GradientDivider_9" AlphaFactor="0.6" />
+
+                        <!-- Click a seat to open the candidate picker -->
+                        <ListPanel DataSource="{PositionList}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="12" MarginRight="12" MarginTop="56" MarginBottom="6" StackLayout.LayoutMethod="VerticalTopToBottom">
                           <ItemTemplate>
-                            <ButtonWidget Command.Click="ExecuteSelect" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="76" MarginBottom="8" MarginRight="10" Brush="Header.Tab.Center" UpdateChildrenStates="true" DoNotPassEventsToChildren="true">
+                            <ButtonWidget Command.Click="ExecuteSelect" IsSelected="@IsSelected" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="86" MarginBottom="6" Brush="Crafting.Order.Card" UpdateChildrenStates="true" DoNotPassEventsToChildren="true">
                               <Children>
 
-                                <ImageIdentifierWidget DataSource="{Visual}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="58" SuggestedHeight="58" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="10" DoNotAcceptEvents="true" />
+                                <!-- Portrait slot; the portrait itself is hidden while the seat is vacant -->
+                                <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="100" SuggestedHeight="75" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="10" Sprite="StdAssets\Popup\tuple_portrait_slot" DoNotAcceptEvents="true">
+                                  <Children>
+                                    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsHidden="@IsVacant" DoNotAcceptEvents="true">
+                                      <Children>
+                                        <ImageIdentifierWidget DataSource="{Visual}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="5" MarginRight="5" MarginTop="5" MarginBottom="5" DoNotAcceptEvents="true" />
+                                      </Children>
+                                    </Widget>
+                                  </Children>
+                                </Widget>
 
-                                <TextWidget Text="@Name" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="82" Brush="Clan.TabControl.Text" DoNotAcceptEvents="true" />
-                                <TextWidget Text="@RelevantSkillText" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="15" Brush="Clan.TabControl.Text" DoNotAcceptEvents="true" />
+                                <TextWidget Text="@PositionName" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="28" VerticalAlignment="Top" MarginLeft="120" MarginRight="20" MarginTop="14" Brush="Popup.Tuple.Text" Brush.FontSize="22" Brush.TextHorizontalAlignment="Left" DoNotAcceptEvents="true" />
+                                <TextWidget Text="@AssigneeName" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="26" VerticalAlignment="Top" MarginLeft="120" MarginRight="240" MarginTop="46" Brush="Info.Text" Brush.FontSize="20" Brush.TextHorizontalAlignment="Left" DoNotAcceptEvents="true" />
+                                <TextWidget Text="@RelevantStatText" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="26" HorizontalAlignment="Right" VerticalAlignment="Top" MarginRight="20" MarginTop="46" Brush="Popup.Timer.Text" Brush.FontSize="18" DoNotAcceptEvents="true" />
 
                               </Children>
                             </ButtonWidget>
@@ -131,13 +83,134 @@
                         </ListPanel>
                       </Children>
                     </Widget>
-                  </Children>
-                </ScrollablePanel>
-                <Standard.VerticalScrollbar Id="CandidateListScrollbar"
-                        HeightSizePolicy="StretchToParent"
-                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                        MarginTop="70" MarginBottom="20" MarginRight="6" />
 
+                    <!-- Kingsguard column (6 slots) -->
+                    <Widget WidthSizePolicy="Fixed" SuggestedWidth="680" HeightSizePolicy="StretchToParent" MarginLeft="20">
+                      <Children>
+                        <BrushWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="Panel.Dent" Brush.ColorFactor="0.2" />
+
+                        <TextWidget Text="Kingsguard" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="36" VerticalAlignment="Top" MarginTop="8" MarginLeft="24" MarginRight="24" Brush="Popup.Tuple.Text" Brush.FontSize="24" Brush.TextHorizontalAlignment="Left" />
+                        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="2" VerticalAlignment="Top" MarginTop="46" MarginLeft="40" MarginRight="40" Sprite="GradientDivider_9" AlphaFactor="0.6" />
+
+                        <!-- Click a slot to open the candidate picker -->
+                        <ListPanel DataSource="{KingsguardSlotList}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="12" MarginRight="12" MarginTop="56" MarginBottom="6" StackLayout.LayoutMethod="VerticalTopToBottom">
+                          <ItemTemplate>
+                            <ButtonWidget Command.Click="ExecuteSelect" IsSelected="@IsSelected" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="86" MarginBottom="6" Brush="Crafting.Order.Card" UpdateChildrenStates="true" DoNotPassEventsToChildren="true">
+                              <Children>
+
+                                <!-- Portrait slot; the portrait itself is hidden while the slot is vacant -->
+                                <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="100" SuggestedHeight="75" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="10" Sprite="StdAssets\Popup\tuple_portrait_slot" DoNotAcceptEvents="true">
+                                  <Children>
+                                    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsHidden="@IsVacant" DoNotAcceptEvents="true">
+                                      <Children>
+                                        <ImageIdentifierWidget DataSource="{Visual}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="5" MarginRight="5" MarginTop="5" MarginBottom="5" DoNotAcceptEvents="true" />
+                                      </Children>
+                                    </Widget>
+                                  </Children>
+                                </Widget>
+
+                                <TextWidget Text="@SlotLabel" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="28" VerticalAlignment="Top" MarginLeft="120" MarginRight="20" MarginTop="14" Brush="Popup.Tuple.Text" Brush.FontSize="22" Brush.TextHorizontalAlignment="Left" DoNotAcceptEvents="true" />
+                                <TextWidget Text="@MemberName" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="26" VerticalAlignment="Top" MarginLeft="120" MarginRight="20" MarginTop="46" Brush="Info.Text" Brush.FontSize="20" Brush.TextHorizontalAlignment="Left" DoNotAcceptEvents="true" />
+
+                              </Children>
+                            </ButtonWidget>
+                          </ItemTemplate>
+                        </ListPanel>
+                      </Children>
+                    </Widget>
+
+                  </Children>
+                </ListPanel>
+
+              </Children>
+            </Widget>
+
+            <!-- Native close button on the window's top-right corner -->
+            <ButtonWidget Command.Click="ExecuteClose" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="70" SuggestedHeight="70" HorizontalAlignment="Right" VerticalAlignment="Top" Brush="Popup.CloseButton" />
+          </Children>
+        </Widget>
+
+        <!-- Candidate picker overlay -->
+        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsPickerVisible">
+          <Children>
+            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#000000FF" AlphaFactor="0.6" />
+
+            <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="890" SuggestedHeight="850" HorizontalAlignment="Center" VerticalAlignment="Center">
+              <Children>
+                <!-- Visible window, inset so the close button sits fully inside the outer container and is clickable everywhere -->
+                <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="35" MarginRight="35" MarginTop="35" MarginBottom="35">
+                  <Children>
+
+                    <!-- Native popup canvas, gradient and ornate frame -->
+                    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\order_popup_canvas" />
+                    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\canvas_gradient" />
+                    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="frame_9" ExtendLeft="18" ExtendTop="18" ExtendRight="18" ExtendBottom="18" />
+
+                    <!-- Title plate -->
+                    <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="760" SuggestedHeight="72" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="10" Sprite="StdAssets\Popup\popper" Color="#DAE374FF">
+                      <Children>
+                        <TextWidget Text="@PickerTitleText" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="46" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Info.Text" Brush.FontSize="26" />
+                      </Children>
+                    </Widget>
+
+
+                    <!-- Candidate list area -->
+                    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="30" MarginRight="30" MarginTop="100" MarginBottom="70">
+                      <Children>
+                        <BrushWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="Panel.Dent" Brush.ColorFactor="0.2" />
+
+                        <ScrollablePanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="2" MarginRight="2" MarginTop="2" MarginBottom="2" AutoHideScrollBars="true" ClipRect="CandidateListClipRect" InnerPanel="CandidateListClipRect\CandidateItemsList" VerticalScrollbar="..\CandidateListScrollbar">
+                          <Children>
+                            <Widget Id="CandidateListClipRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" MarginRight="16" MarginTop="10" MarginBottom="10" ClipContents="true">
+                              <Children>
+                                <ListPanel Id="CandidateItemsList" DataSource="{CandidateList}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalTopToBottom">
+                                  <ItemTemplate>
+                                    <ButtonWidget Command.Click="ExecuteSelect" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="70" Brush="Popup.SelectionElement.Tuple" Brush.ColorFactor="0.6" UpdateChildrenStates="true" DoNotPassEventsToChildren="true">
+                                      <Children>
+
+                                        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="86" SuggestedHeight="64" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="20" Sprite="StdAssets\Popup\tuple_portrait_slot" DoNotAcceptEvents="true">
+                                          <Children>
+                                            <ImageIdentifierWidget DataSource="{Visual}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" TextureProviderName="@TextureProviderName" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="5" MarginRight="5" MarginTop="5" MarginBottom="5" DoNotAcceptEvents="true" />
+                                          </Children>
+                                        </Widget>
+
+                                        <TextWidget Text="@Name" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="120" MarginRight="200" Brush="Popup.Tuple.Text" Brush.FontSize="22" Brush.TextHorizontalAlignment="Left" DoNotAcceptEvents="true" />
+                                        <TextWidget Text="@RelevantSkillText" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" MarginRight="20" Brush="Popup.Timer.Text" Brush.FontSize="18" DoNotAcceptEvents="true" />
+
+                                      </Children>
+                                    </ButtonWidget>
+                                  </ItemTemplate>
+                                </ListPanel>
+                              </Children>
+                            </Widget>
+
+                            <!-- Soft fade over the list, as in native selection popups -->
+                            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\canvas_gradient" AlphaFactor="0.5" DoNotAcceptEvents="true" />
+                          </Children>
+                        </ScrollablePanel>
+
+                        <!-- Native thin scrollbar -->
+                        <ScrollbarWidget Id="CandidateListScrollbar" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="6" MarginTop="15" MarginBottom="15" AlignmentAxis="Vertical" Handle="CandidateListScrollbarHandle" MaxValue="100" MinValue="0">
+                          <Children>
+                            <Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="2" HorizontalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#5A4033FF" AlphaFactor="0.5" />
+                            <ImageWidget Id="CandidateListScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="5" SuggestedHeight="10" HorizontalAlignment="Center" Brush="FaceGen.Scrollbar.Handle" />
+                          </Children>
+                        </ScrollbarWidget>
+                      </Children>
+                    </Widget>
+
+                  </Children>
+                </Widget>
+
+                <!-- Native close button on the window's top-right corner -->
+                <ButtonWidget Command.Click="ExecuteClosePicker" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="70" SuggestedHeight="70" HorizontalAlignment="Right" VerticalAlignment="Top" Brush="Popup.CloseButton" />
+
+                <!-- Unassign button (native popup button on the bottom edge, inside the outer container so it is fully clickable) -->
+                <ButtonWidget Command.Click="ExecuteUnassignSelected" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="286" SuggestedHeight="82" HorizontalAlignment="Center" VerticalAlignment="Bottom" PositionYOffset="1" Brush="Standard.PopupBackButton" UpdateChildrenStates="true" DoNotPassEventsToChildren="true">
+                  <Children>
+                    <TextWidget Text="Unassign" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" Brush="CharacterDeveloper.PerkPopup.ButtonText" DoNotAcceptEvents="true" />
+                  </Children>
+                </ButtonWidget>
               </Children>
             </Widget>
           </Children>

@@ -143,11 +143,11 @@ namespace SmallCouncils.Settings
 
         [SettingPropertyInteger("Officeholder's daily personal gold", 0, 50000, HintText = "Flat gold given to the Master of Coin themself each day.", Order = 1)]
         [SettingPropertyGroup("Benefits: Master of Coin")]
-        public int MasterOfCoinPersonalGold { get; set; } = 10000;
+        public int MasterOfCoinPersonalGold { get; set; } = 5000;
 
         [SettingPropertyFloatingInteger("Ruler's gold per Steward skill point", 0f, 100f, "#0.0", HintText = "Daily gold given to the ruler, multiplied by the Master of Coin's Steward skill.", Order = 2)]
         [SettingPropertyGroup("Benefits: Master of Coin")]
-        public float MasterOfCoinClanIncomeMultiplier { get; set; } = 20f;
+        public float MasterOfCoinClanIncomeMultiplier { get; set; } = 5f;
 
         // ============================================================
         // Master of Whisperers
@@ -187,7 +187,7 @@ namespace SmallCouncils.Settings
 
         [SettingPropertyInteger("Ruler's daily influence, as % of the Hand's clan influence", 0, 50, HintText = "Daily influence given to the ruler's clan, as a whole-number percentage of the Hand of the King's own clan's current influence. E.g. 1 = 1%.", Order = 1)]
         [SettingPropertyGroup("Benefits: Hand of the King")]
-        public int HandOfTheKingInfluencePercentPoints { get; set; } = 3;
+        public int HandOfTheKingInfluencePercentPoints { get; set; } = 1;
 
         // ============================================================
         // Master of Laws

@@ -17,6 +17,7 @@ namespace SmallCouncils.UI.Assignment
         private string _slotLabel;
         private string _memberName;
         private bool _isVacant;
+        private bool _isSelected;
         private ImageIdentifierVM _visual;
 
         public Kingdom Kingdom { get; }
@@ -109,6 +110,21 @@ namespace SmallCouncils.UI.Assignment
                 {
                     _visual = value;
                     OnPropertyChangedWithValue(value, nameof(Visual));
+                }
+            }
+        }
+
+        // Highlights this row while its candidate picker is open.
+        [DataSourceProperty]
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (value != _isSelected)
+                {
+                    _isSelected = value;
+                    OnPropertyChangedWithValue(value, nameof(IsSelected));
                 }
             }
         }

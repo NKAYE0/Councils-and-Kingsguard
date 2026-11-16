@@ -107,7 +107,7 @@ namespace SmallCouncils.Behaviors
             // treasury and showing up as its own line in the native clan
             // finance breakdown tooltip — see
             // CouncilHealingAndMoraleBonusService.RecomputeMasterOfCoin.
-            int personalGold = CouncilSettings.Instance?.MasterOfCoinPersonalGold ?? 10000;
+            int personalGold = CouncilSettings.Instance?.MasterOfCoinPersonalGold ?? 5000;
             masterOfCoin.ChangeHeroGold(personalGold);
         }
 

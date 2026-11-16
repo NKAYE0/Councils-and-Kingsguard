@@ -50,8 +50,8 @@ namespace SmallCouncils.UI.View
                 case CouncilPosition.MasterOfCoin:
                 {
                     int steward = holder.GetSkillValue(DefaultSkills.Steward);
-                    int personalGold = s?.MasterOfCoinPersonalGold ?? 10000;
-                    float clanIncomeMultiplier = s?.MasterOfCoinClanIncomeMultiplier ?? 20f;
+                    int personalGold = s?.MasterOfCoinPersonalGold ?? 5000;
+                    float clanIncomeMultiplier = s?.MasterOfCoinClanIncomeMultiplier ?? 5f;
                     int rulerIncome = (int)System.Math.Floor(steward * clanIncomeMultiplier);
                     return $"+{personalGold:N0} gold/day (self), +{rulerIncome} gold/day to clan treasury";
                 }
